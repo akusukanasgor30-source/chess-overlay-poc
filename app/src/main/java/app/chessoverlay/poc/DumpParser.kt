@@ -20,7 +20,7 @@ data class BoardSnapshot(
 object DumpParser {
     private val MOVE_NO = Regex("\\d+\\.{1,3}")
     private val SAN = Regex(
-        "(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBNqrbn])?)[+#]?[!?]{0,2}"
+        "(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBNkqrbn]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBNqrbn])?)[+#]?[!?]{0,2}"
     )
 
     fun placementOf(pos: Map<String, String>): String {

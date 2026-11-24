@@ -44,18 +44,15 @@ class PositionTracker {
                 }
             }
             if (matched.isNotEmpty()) {
-                if (matched.size > 1) ambiguous = true
+                // beberapa giliran cocok: pilih yang diprioritaskan (hint dari daftar langkah), tandai ambigu
+                val chosen = if (matched.size > 1) { ambiguous = true; listOf(matched[0]) } else matched
                 val reported = ArrayList<PlayedMove>()
-                val next = ArrayList<Board>()
-                for ((idx, pair) in matched.withIndex()) {
-                    val b = pair.first
-                    for (m in pair.second) {
-                        if (idx == 0) reported.add(PlayedMove(if (b.sideToMove == Side.WHITE) 'w' else 'b', uci(m)))
-                        b.doMove(m)
-                    }
-                    next.add(b)
+                val b = chosen[0].first
+                for (m in chosen[0].second) {
+                    reported.add(PlayedMove(if (b.sideToMove == Side.WHITE) 'w' else 'b', uci(m)))
+                    b.doMove(m)
                 }
-                candidates = next
+                candidates = listOf(b)
                 last = s.placement
                 return Result.Moves(reported, ambiguous)
             }
@@ -65,16 +62,19 @@ class PositionTracker {
 
     private fun init(s: BoardSnapshot): Result {
         val hint = s.sideToMoveHint
+        // Hint dari daftar langkah hanya menentukan URUTAN prioritas; kedua giliran dipertahankan sampai
+        // langkah berikutnya menentukan mana yang benar (hint bisa salah, mis. jendela daftar terpotong).
         val sides: List<Char> = when {
-            hint != null -> listOf(hint)
             s.placement == START -> listOf('w')
+            hint == 'b' -> listOf('b', 'w')
             else -> listOf('w', 'b')
         }
         val boards = sides.mapNotNull { buildBoard(s.placement, it) }
         if (boards.isEmpty()) return Result.Rejected("posisi tidak valid menurut aturan catur")
         candidates = boards
         last = s.placement
-        return Result.Synced(boards.size == 1)
+        val known = boards.size == 1 || (hint != null && boards[0].sideToMove == (if (hint == 'w') Side.WHITE else Side.BLACK))
+        return Result.Synced(known)
     }
 
     companion object {

@@ -35,7 +35,7 @@ data class Report(
 object Analyzer {
     private val SQUARE = Regex("(?<![A-Za-z0-9])([a-hA-H])([1-8])(?![A-Za-z0-9])")
     private val SAN = Regex(
-        "(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBN\u2654-\u2659\u265A-\u265F]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?[!?]{0,2}"
+        "(?:O-O(?:-O)?|0-0(?:-0)?|[KQRBNkqrbn\u2654-\u2659\u265A-\u265F]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?)[+#]?[!?]{0,2}"
     )
     private val PURE_SQUARE = Regex("[a-h][1-8]")
     private val MOVE_NO = Regex("\\d+\\.{1,3}")

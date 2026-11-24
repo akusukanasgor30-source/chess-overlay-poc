@@ -28,7 +28,7 @@ class MainActivity : Activity() {
             setPadding(dp(16), dp(24), dp(16), dp(24))
         }
         fun label(t: String, size: Float = 14f) = TextView(this).apply { text = t; textSize = size }
-        col.addView(label("Chess Overlay PoC - modul 2", 20f))
+        col.addView(label("Chess Overlay PoC - modul 1", 20f))
         col.addView(label(
             "Menguji apakah papan Chess.com bisa dibaca lewat AccessibilityService.\n\n" +
                 "1. Aktifkan service (tombol di bawah).\n" +

@@ -47,3 +47,6 @@ fixture tes sintetis, bukan format asli Chess.com.
   langkah pertama setelah sinkronisasi tidak diketahui; daftar langkah di layar hanya jendela (langkah awal
   tidak ada di pohon) dan menulis gajah sebagai huruf kecil ("be5"), sehingga tidak dipakai sebagai sumber
   langkah, hanya sebagai petunjuk giliran.
+- Temuan dump ke-3: huruf bidak di daftar langkah tampaknya mengikuti warna (putih = huruf kecil: "na6", "nc6", "be5";
+  hitam = huruf besar: "Nc6", "Bb7"; pion selalu huruf kecil). Pola dari 3 dump, belum terbukti. Parser kini menerima
+  huruf kecil. Hint giliran hanya prioritas: kedua giliran dipertahankan sampai langkah berikutnya menentukan.

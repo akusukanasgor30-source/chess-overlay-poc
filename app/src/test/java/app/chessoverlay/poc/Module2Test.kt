@@ -58,7 +58,37 @@ class Module2Test {
         assertEquals(true, s.practiceMode)
     }
 
+    @Test fun realDumpLateGame() {
+        // huruf bidak putih ditulis huruf kecil di daftar langkah ("na6", "nc6"); sebelumnya terbuang dan giliran salah
+        val s = DumpParser.parse(load("dump_late.json"), 1080, 2114)!!
+        assertEquals("1r1r2k1/pb3pp1/p1N1p2p/8/8/8/P1P1KPPP/8", s.placement)
+        assertEquals(17, s.pieceCount)
+        assertEquals(listOf("na6", "bxa6", "21.", "nc6", "Bb7"), s.moveTokens)
+        assertEquals('w', s.sideToMoveHint)        // 21...Bb7 adalah langkah hitam, jadi giliran putih
+    }
+
+    @Test fun realLatePositionTracksRealMoves() {
+        val t = PositionTracker()
+        val s = DumpParser.parse(load("dump_late.json"), 1080, 2114)!!
+        assertEquals(PositionTracker.Result.Synced(true), t.onSnapshot(s))
+        assertTrue(t.currentFen!!.contains(" w "))
+        // putih Nxd8, lalu hitam Rxd8 (dua langkah di antara dua dump)
+        val r = t.onSnapshot(snap("3r2k1/pb3pp1/p3p2p/8/8/8/P1P1KPPP/8"))
+        assertEquals(
+            PositionTracker.Result.Moves(listOf(PositionTracker.PlayedMove('w', "c6d8"), PositionTracker.PlayedMove('b', "b8d8")), false), r
+        )
+    }
+
+    @Test fun wrongHintStillRecoversOnNextMove() {
+        val t = PositionTracker()
+        // hint 'b' salah: sebenarnya putih yang jalan (e2e4)
+        t.onSnapshot(snap("4k3/8/8/8/8/8/4P3/4K3", 'b'))
+        val r = t.onSnapshot(snap("4k3/8/8/8/4P3/8/8/4K3"))
+        assertEquals(PositionTracker.Result.Moves(listOf(PositionTracker.PlayedMove('w', "e2e4")), false), r)
+    }
+
     @Test fun sideHintFromMoveList() {
+        assertEquals('w', DumpParser.sideHint(listOf("na6", "bxa6", "21.", "nc6", "Bb7")))
         assertEquals('b', DumpParser.sideHint(listOf("5.", "be5", "Nc6", "6.", "bxf6")))
         assertEquals('w', DumpParser.sideHint(listOf("1.", "e4", "e5")))
         assertEquals('w', DumpParser.sideHint(listOf("1.")))

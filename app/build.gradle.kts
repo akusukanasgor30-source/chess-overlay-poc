@@ -11,8 +11,8 @@ android {
         applicationId = "app.chessoverlay.poc"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "0.2-modul2"
+        versionCode = 1
+        versionName = "0.1-poc"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
