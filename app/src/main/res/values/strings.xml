@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Chess Overlay PoC</string>
-    <string name="service_label">Chess Overlay PoC (uji pembacaan papan)</string>
-    <string name="service_description">Menguji apakah papan Chess.com dapat dibaca dari accessibility tree. Pohon layar dibaca hanya saat tombol DUMP ditekan. Tidak ada screenshot dan tidak ada data yang dikirim ke internet.</string>
-</resources>
